@@ -2,12 +2,26 @@ import requests
 
 from crypto import ctx
 
-username = input("用户名：")
-password = input("密码：")
-username = ctx.call('stringtoaesencrypt', username)
-password = ctx.call('stringtoaesencrypt', password)
+username = ''
+password = ''
+# 查询保存的用户名密码，如果没有的话让用户自己输入
+try:
+    with open('data.txt', 'r') as f:
+        for i, line in enumerate(f.readlines()):
+            if i == 0:
+                username = line.strip()
+            elif i == 1:
+                password = line.strip()
+except FileNotFoundError:
+    print("没有找到用户名密码，请手动输入")
+
+if username == '' or password == '':
+    username = input("请输入用户名：")
+    password = input("请输入密码：")
+    username = ctx.call('stringtoaesencrypt', username)
+    password = ctx.call('stringtoaesencrypt', password)
 # 返回code
-code = requests.post('******', {'submit': 'submit'}).json()['code']
+code = requests.post('****', {'submit': 'submit'}).json()['code']
 
 # 登录
 data = {'username': username,
@@ -16,5 +30,9 @@ data = {'username': username,
         'language': '0',
         'code': code,
         'submit': 'submit'}
-r = requests.post('*****', data)
+r = requests.post('****', data)
+if not r.text.startswith('0#'):
+    with open('data.txt', 'w') as file:
+        file.write(username + '\n')
+        file.write(password + '\n')  # 添加换行符
 print(r.text)
