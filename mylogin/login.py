@@ -7,12 +7,13 @@ subprocess.Popen = partial(subprocess.Popen,startupinfo=startupinfo, encoding='u
 import execjs
 from crypto import ctx
 
-def login(username, password):
-    key = execjs.compile(requests.get('http://****').text)
+def login(username, password, encryption=True):
+    key = execjs.compile(requests.get('****').text)
     encrypt_config_key = key.eval('encrypt_config_key')
     encrypt_config_iv = key.eval('encrypt_config_iv')
-    username = ctx.call('stringtoaesencrypt', username, encrypt_config_key, encrypt_config_iv)
-    password = ctx.call('stringtoaesencrypt', password, encrypt_config_key, encrypt_config_iv)
+    if encryption:
+        username = ctx.call('stringtoaesencrypt', username, encrypt_config_key, encrypt_config_iv)
+        password = ctx.call('stringtoaesencrypt', password, encrypt_config_key, encrypt_config_iv)
     # 返回code
     code = requests.post('****', {'submit': 'submit'}).json()['code']
 
@@ -23,12 +24,15 @@ def login(username, password):
             'language': '0',
             'code': code,
             'submit': 'submit'}
+    # print(data)
     r = requests.post('****', data)
     if not r.text.startswith('0#'):
         with open('data.txt', 'w') as file:
             file.write(username + '\n')
             file.write(password + '\n')  # 添加换行符
-    return r.text
+        return '登陆成功'
+    else:
+        return r.text
 
 
 def main():
@@ -48,10 +52,12 @@ def main():
     if username == '' or password == '':
         username = input("请输入用户名：")
         password = input("请输入密码：")
-
-    login(username, password)
+        print(login(username, password))
+    else:
+        print(login(username, password, False))
 
 
 if __name__ == '__main__':
     main()
+    input("请按任意键退出！")
 
