@@ -8,7 +8,7 @@ import execjs
 from crypto import ctx
 
 def login(username, password, encryption=True):
-    key = execjs.compile(requests.get('****').text)
+    key = execjs.compile(requests.get('******').text)
     encrypt_config_key = key.eval('encrypt_config_key')
     encrypt_config_iv = key.eval('encrypt_config_iv')
     if encryption:
@@ -26,6 +26,7 @@ def login(username, password, encryption=True):
             'submit': 'submit'}
     # print(data)
     r = requests.post('****', data)
+    r.encoding = r.apparent_encoding
     if not r.text.startswith('0#'):
         with open('data.txt', 'w') as file:
             file.write(username + '\n')
