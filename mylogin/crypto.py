@@ -1,5 +1,5 @@
 import execjs
-md5_js = '''
+crypto_js = '''
 /*
 CryptoJS v3.1.2
 code.google.com/p/crypto-js
@@ -499,9 +499,7 @@ CryptoJS.lib.Cipher || function (u) {
 })();
 CryptoJS.pad.ZeroPadding={pad:function(a,c){var b=4*c;a.clamp();a.sigBytes+=b-(a.sigBytes%b||b)},unpad:function(a){for(var c=a.words,b=a.sigBytes-1;!(c[b>>>2]>>>24-8*(b%4)&255);)b--;a.sigBytes=b+1}};
 
-function stringtoaesencrypt(data){
-    var encrypt_config_key = "LRIkEGfMp679amA2";
-    var encrypt_config_iv = "VUJ4DzCkM0zTa5XW";
+function stringtoaesencrypt(data,encrypt_config_key,encrypt_config_iv){
     var key  = CryptoJS.enc.Latin1.parse(encrypt_config_key.substring(0,16));
     var iv   = CryptoJS.enc.Latin1.parse(encrypt_config_iv.substring(0,16));
     var encrypted = CryptoJS.AES.encrypt(data,key,{iv:iv,mode:CryptoJS.mode.CBC,padding:CryptoJS.pad.ZeroPadding});
@@ -509,4 +507,4 @@ function stringtoaesencrypt(data){
 }
 
 '''
-ctx = execjs.compile(md5_js)
+ctx = execjs.compile(crypto_js)
