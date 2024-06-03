@@ -50,6 +50,9 @@ class Example(QWidget):
         self.show()
 
     def clickButton(self, username, password, encryption, reviewEdit=None):
+        if username == '' or password == '':
+            reviewEdit.setText("用户名密码不能为空！")
+            return
         res = login(username, password, encryption)
         reviewEdit.setText(res)
 

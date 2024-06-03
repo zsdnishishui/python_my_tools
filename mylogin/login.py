@@ -8,14 +8,14 @@ import execjs
 from crypto import ctx
 
 def login(username, password, encryption=True):
-    key = execjs.compile(requests.get('****').text)
+    key = execjs.compile(requests.get('http://***/js/rsajs/wk.js').text)
     encrypt_config_key = key.eval('encrypt_config_key')
     encrypt_config_iv = key.eval('encrypt_config_iv')
     if encryption:
         username = ctx.call('stringtoaesencrypt', username, encrypt_config_key, encrypt_config_iv)
         password = ctx.call('stringtoaesencrypt', password, encrypt_config_key, encrypt_config_iv)
     # 返回code
-    code = requests.post('***', {'submit': 'submit'}).json()['code']
+    code = requests.post('http://***/user_auth_verify.cgi', {'submit': 'submit'}).json()['code']
 
     # 登录
     data = {'username': username,
@@ -25,7 +25,7 @@ def login(username, password, encryption=True):
             'code': code,
             'submit': 'submit'}
     # print(data)
-    r = requests.post('***', data)
+    r = requests.post('http://***/portal.cgi', data)
     r.encoding = r.apparent_encoding
     if not r.text.startswith('0#'):
         with open('data.txt', 'w') as file:
