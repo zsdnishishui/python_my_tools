@@ -22,22 +22,27 @@ class Example(QWidget):
     def initUI(self):
         username, password = get_save()
         reviewEdit = QTextEdit()
+        reviewEdit.setReadOnly(True)
         grid = QGridLayout()
-        grid.setSpacing(10)
+        grid.setSpacing(2)
         if username == '' or password == '':
-            title = QLabel('用户名：')
-            author = QLabel('密码：')
-            titleEdit = QLineEdit()
-            authorEdit = QLineEdit()
+            username_label = QLabel('用户名')
+            password_label = QLabel('密码')
+            usernameEdit = QLineEdit()
+            passwordEdit = QLineEdit()
+            passwordEdit.setEchoMode(QLineEdit.EchoMode.Password)
             btn = QPushButton('登陆', self)
-            grid.addWidget(title, 1, 0)
-            grid.addWidget(titleEdit, 1, 1)
+            btn2 = QPushButton('隐藏', self)
+            grid.addWidget(username_label, 1, 0)
+            grid.addWidget(usernameEdit, 1, 1)
 
-            grid.addWidget(author, 2, 0)
-            grid.addWidget(authorEdit, 2, 1)
+            grid.addWidget(password_label, 2, 0)
+            grid.addWidget(passwordEdit, 2, 1)
 
             grid.addWidget(btn, 3, 0)
-            btn.clicked.connect(lambda: self.clickButton(titleEdit.text(), authorEdit.text(), True, reviewEdit))
+            grid.addWidget(btn2, 2, 2)
+            btn.clicked.connect(lambda: self.clickButton(usernameEdit.text(), passwordEdit.text(), True, reviewEdit))
+            btn2.clicked.connect(lambda: self.clickButton2(btn2,passwordEdit))
         else:
             self.clickButton(username, password, False, reviewEdit)
 
@@ -55,6 +60,14 @@ class Example(QWidget):
             return
         res = login(username, password, encryption)
         reviewEdit.setText(res)
+
+    def clickButton2(self,btn2,passwordEdit):
+        if btn2.text() == '显示':
+            btn2.setText('隐藏')
+            passwordEdit.setEchoMode(QLineEdit.EchoMode.Password)
+        else:
+            btn2.setText('显示')
+            passwordEdit.setEchoMode(QLineEdit.EchoMode.Normal)
 
 
 def main():
