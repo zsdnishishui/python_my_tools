@@ -15,7 +15,7 @@ class Example(QWidget):
 
         qr = self.frameGeometry()
         cp = self.screen().availableGeometry().center()
-
+        self.resize(400,100)
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
