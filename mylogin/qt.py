@@ -8,7 +8,7 @@ class Example(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.loginUI()
+        self.initUI()
 
     def center(self):
 
@@ -17,15 +17,13 @@ class Example(QWidget):
         self.resize(300,100)
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-    def loginUI(self):
-        username, password = get_save()
-        if username == '' or password == '':
-            self.initUI()
-        else:
-            self.clickButton(username, password, False)
-            self.initUI()
-
     def initUI(self):
+        username, password = get_save()
+        if username and password:
+            self.clickButton(username, password, False)
+        self.loginUI()
+
+    def loginUI(self):
         grid = QGridLayout()
         grid.setSpacing(10)
         username_label = QLabel('输入用户名')
