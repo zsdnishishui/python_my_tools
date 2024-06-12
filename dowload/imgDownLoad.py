@@ -4,10 +4,10 @@ import threading
 import requests
 from bs4 import BeautifulSoup
 from headers import headers_list
-
+proxies = { "http": "http://127.0.0.1:8100", "https": "http://127.0.0.1:8100", }
 headers = random.choice(headers_list)
-htmlUrl = 'https://cl.3525x.xyz/htm_data/2406/16/6333339.html'
-html = requests.get(htmlUrl, headers=random.choice(headers_list)).text
+htmlUrl = 'https://cl.3525x.xyz/htm_data/2406/8/6363463.html'
+html = requests.get(htmlUrl, headers=random.choice(headers_list),proxies=proxies).text
 # 创建Beautiful Soup对象
 soup = BeautifulSoup(html, 'html.parser')
 list = []
@@ -29,10 +29,10 @@ def downLoad(i, url, dir):
     # print(url)
     file = url.split("/")[-1]
     try:
-        r = requests.get(url, headers=random.choice(headers_list))
+        r = requests.get(url, headers=random.choice(headers_list),proxies=proxies)
     except:
         for j in range(4):  # 循环去请求网站
-            r = requests.get(url, headers=random.choice(headers_list))
+            r = requests.get(url, headers=random.choice(headers_list),proxies=proxies)
             if r.status_code == 200:
                 break
 
